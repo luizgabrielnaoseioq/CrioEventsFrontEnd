@@ -11,7 +11,7 @@ export function Header() {
         <CalendarCheck className="h-6 w-6" />
         <Separator orientation="vertical" className="h-6" />
         <nav className="flex items-center space-x-4 lg:space-x-6">
-          <NavLink to={"/home"}>
+          <NavLink to={"/calendar"}>
             <Home className="h-4 w-4" />
             Início
           </NavLink>
