@@ -1,29 +1,66 @@
+import { signIn } from "@/api/sign-in";
+import { useSession } from "@/hooks/use-session";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
-import { signIn } from "../../api/sign-in";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export function SignIn() {
+  const { signIn: signInUser } = useSession();
+  const navigate = useNavigate();
+
   const { mutateAsync: signInFn } = useMutation({
     mutationFn: async (token: string) => {
       return await signIn({ token });
     },
+    mutationKey: ["authentication"],
+    onSuccess: () => {
+      toast.success("Sucesso ao realizar login!");
+      navigate("/home");
+    },
+    onError: () => {
+      toast.error("Erro ao realizar login. Tente novamente");
+    },
   });
+
+  console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full">
-      <h1 className="font-bold text-2xl">
-        Bem vindo ao <span className="font-bold text-blue-500">Crio!</span>
-      </h1>
-      <GoogleOAuthProvider clientId="217279053649-p17jfr1nr6r61umc7ft73pnrcsc50pq7.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <div
+        className="flex flex-col space-y-4 items-center justify-center h-full"
+        data-aos="fade-right"
+      >
+        <h1 className="text-2xl font-bold">
+          Bem vindo ao <span className="text-blue-500">Crio eventos!</span>
+        </h1>
         <GoogleLogin
-          onSuccess={async (credentialsResponse: any) => {            
+          theme="filled_blue"
+          size="large"
+          text="continue_with"
+          shape="circle"
+          ux_mode="popup"
+          onSuccess={async (credentialResponse) => {
+            const token = credentialResponse.credential;
+            if (!token) return;
             try {
-              signInFn(credentialsResponse.credential);
-            } catch (error) {
-              console.error(error);
+              const response = await signInFn(token);
+              console.log("teste", response);
+              if (response?.user && response?.accessToken) {
+                signInUser(
+                  response.user,
+                  response.accessToken,
+                  response.refreshToken
+                );
+              }
+            } catch (err) {
+              console.error("Erro ao autenticar:", err);
             }
           }}
+          onError={() => console.log("Google OAuth Failed")}
+          useOneTap
         />
-      </GoogleOAuthProvider>
-    </div>
+      </div>
+    </GoogleOAuthProvider>
   );
 }

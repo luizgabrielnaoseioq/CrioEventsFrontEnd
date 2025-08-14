@@ -1,4 +1,7 @@
-export interface ISignIn{
-    clientId: string
-    crendential: string
+import type { IUserCrendentials } from "./user-crendentials"
+
+export interface ISignIn {
+    accessToken: string
+    refreshToken: string
+    user: IUserCrendentials
 }

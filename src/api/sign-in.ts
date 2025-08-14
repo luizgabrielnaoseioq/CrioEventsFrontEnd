@@ -1,16 +1,12 @@
-import { api } from "../lib/axios";
-import type { ISignIn } from "../models/sign-in";
+import type { ISignIn } from "@/models/sign-in";
+import { api } from "@/lib/axios";
 
 export async function signIn({ token }: { token: string }) {
-
-    console.log('tokne mano', token);
-    
-
     try {
-        const response = await api.post<ISignIn>('/users', {
-           token
+        const { data } = await api.post<ISignIn>('/users', {
+            token
         })
-        return response
+        return data
     } catch (error) {
         console.error(error);
     }
