@@ -16,7 +16,7 @@ export function SignIn() {
     mutationKey: ["authentication"],
     onSuccess: () => {
       toast.success("Sucesso ao realizar login!");
-      navigate("/home");
+      navigate("/calendar");
     },
     onError: () => {
       toast.error("Erro ao realizar login. Tente novamente");
