@@ -47,13 +47,14 @@ export function EventRegistrationPage() {
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     reset,
-    watch,
+    // watch,
   } = useForm<EventFormData>();
 
-  const watchedImage = watch("image");
+  // const watchedImage = watch("image")
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -77,14 +78,21 @@ export function EventRegistrationPage() {
         description: data.description,
         end_date: data.end_date,
         event_url: data.event_url,
-        image_url: data.image ? data.image[0] : null,
+        image_url: imagePreview,
         location: data.location,
         social_links: data.social_links,
         start_date: data.start_date,
         title: data.title,
+        address: {
+          complement: "teste",
+          street: "rua do sexo",
+          number: "69",
+          city: "CRICIUMA",
+        },
+        categorie: "SHOW",
       };
 
-      await api.post("/events", formData);
+      await api.post("/event", formData);
 
       reset();
       setImagePreview(null);
@@ -94,13 +102,14 @@ export function EventRegistrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-8">
+          className="text-center mb-8"
+        >
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             Cadastro de Eventos
           </h1>
@@ -112,7 +121,8 @@ export function EventRegistrationPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}>
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
           <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
             <CardHeader className="pb-6">
               <CardTitle className="flex items-center gap-2 text-2xl">
@@ -162,7 +172,8 @@ export function EventRegistrationPage() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="start_date"
-                      className="flex items-center gap-2">
+                      className="flex items-center gap-2"
+                    >
                       <Calendar className="w-4 h-4" /> Data de Início *
                     </Label>
                     <Input
@@ -206,7 +217,8 @@ export function EventRegistrationPage() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="social_links"
-                      className="flex items-center gap-2">
+                      className="flex items-center gap-2"
+                    >
                       <Link2 className="w-4 h-4" /> Redes Sociais
                     </Label>
                     <Input
@@ -220,7 +232,8 @@ export function EventRegistrationPage() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="event_url"
-                      className="flex items-center gap-2">
+                      className="flex items-center gap-2"
+                    >
                       <Globe className="w-4 h-4" /> URL do Evento
                     </Label>
                     <Input
@@ -242,7 +255,8 @@ export function EventRegistrationPage() {
                       <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                       <Label
                         htmlFor="image"
-                        className="cursor-pointer text-blue-600 font-medium">
+                        className="cursor-pointer text-blue-600 font-medium"
+                      >
                         Clique para fazer upload
                       </Label>
                       <Input
@@ -266,7 +280,8 @@ export function EventRegistrationPage() {
                         variant="destructive"
                         size="sm"
                         onClick={removeImage}
-                        className="absolute top-2 right-2">
+                        className="absolute top-2 right-2"
+                      >
                         <X className="w-4 h-4" />
                       </Button>
                     </div>
@@ -278,7 +293,8 @@ export function EventRegistrationPage() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-12">
+                    className="w-full h-12"
+                  >
                     {isSubmitting ? "Cadastrando..." : "Cadastrar Evento"}
                   </Button>
                 </div>
@@ -297,7 +313,8 @@ export function EventRegistrationPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+        >
           <Card className="bg-blue-50 border-blue-200">
             <CardContent className="p-4 text-center">
               <Calendar className="w-8 h-8 text-blue-600 mx-auto mb-2" />
